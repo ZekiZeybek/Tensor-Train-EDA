@@ -134,6 +134,7 @@ See `notebooks/`:
 
 
 ## TODO
+- General cleaning up needed
 - Test the optimizer on probabilistic parametric function fitting
 - Generalize the run() interface to support different gradient modes + probability model families
 - Refactor for a cleaner OOP architecture and integrate JAX backends for heavy math (current single(two)-site NumPy version is already stable)
