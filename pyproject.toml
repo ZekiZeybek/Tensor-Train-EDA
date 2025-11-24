@@ -1,0 +1,26 @@
+[project]
+name = "tt-eda"
+version = "0.1.0"
+description = "Tensor-train factorized probability models for estimation of distribution algorithms"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+authors = [
+  { name = "Zeki Zeybek", email = "zeybek.zeki@proton.me" }
+]
+
+dependencies = [
+  "alpha_vantage>=3.0.0",
+  "matplotlib>=3.7",
+  "numpy>=1.24.4",
+  "opt_einsum>=3.4.0",
+  "pandas>=2.3.3",
+  "scipy>=1.11.0",
+]
+
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
