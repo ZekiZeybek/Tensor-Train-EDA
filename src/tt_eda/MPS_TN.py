@@ -1500,5 +1500,43 @@ class MPS(TNetwork):
         
         return cls(length, num_phys_leg, nodes)
     
+    @classmethod
+    def GHZ_pdf_MPS_1Norm(cls, length: int, num_phys_leg: List[int] | int = 1, const_chi: int = 1, phys_leg_dim: List[int] | int = 2) -> 'MPS':
+        '''
+        Creates an MPS representing the GHZ state probability distribution 
+        for 1-Norm definition. Padding with zeros to enlarge the bond dimension
+        '''
+        nodes = []
+
+        if isinstance(phys_leg_dim, int):
+            phys_dims = [phys_leg_dim] * length
+        else:
+            phys_dims = phys_leg_dim
+        
+        for i in range(length):
+            if i == 0:
+                left_dim, right_dim = 1, const_chi
+            elif i == length - 1:
+                left_dim, right_dim = const_chi, 1
+            else:
+                left_dim, right_dim = const_chi, const_chi
+            
+            phys_dim = phys_dims[i]
+            node = TNode(rank=3, node_id=f'M{i}', leg_dims=[left_dim, phys_dim, right_dim])
+                        
+            node.tensor = np.zeros((left_dim, phys_dim, right_dim))
+            if i == 0:
+                node.tensor[0, 0, 0] = 0.5 
+                node.tensor[0, 1, const_chi-1] = 0.5
+            elif i == length - 1:
+                node.tensor[0, 0, 0] = 1
+                node.tensor[const_chi-1, 1, 0] = 1
+            else:
+                node.tensor[0, 0, 0] = 1
+                node.tensor[const_chi-1, 1, const_chi-1] = 1
+                
+            nodes.append(node)
+        
+        return cls(length, num_phys_leg, nodes)
 
 
