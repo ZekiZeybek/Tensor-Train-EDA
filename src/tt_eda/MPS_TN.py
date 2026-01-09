@@ -507,12 +507,16 @@ class MPS(TNetwork):
                         phys = sample[site]
                         Lm = L_envs[idx][site]   
                         Rm = R_envs[idx][site]
+                        psi_n = float(Lm @ T[:, phys, :] @ Rm) 
                         G = np.einsum('a,b->ab', Lm.ravel(), Rm.ravel()) 
+                        G = G/psi_n
+                        print('psi_n', psi_n)
                         G_norm = np.linalg.norm(G)
-                        if G_norm > grad_clip:
-                            G = (grad_clip / G_norm) * G
+                        print('G_norm', G_norm)
+                        # if G_norm > grad_clip:
+                        #     print('clipping grad norm from',G_norm)
+                        #     G = (grad_clip / G_norm) * G
                         grad[:, phys, :] += G
-
                     grad /= N
                     T += learning_rate * grad
                     T /= np.linalg.norm(T)
@@ -534,10 +538,14 @@ class MPS(TNetwork):
                         phys = sample[site]
                         Lm = L_envs[idx][site]   
                         Rm = R_envs[idx][site]
+                        psi_n = float(Lm @ T[:, phys, :] @ Rm) 
+                        print('psi_n', psi_n)
                         G = np.einsum('a,b->ab', Lm.ravel(), Rm.ravel()) 
+                        G = G/psi_n
                         G_norm = np.linalg.norm(G)
-                        if G_norm > grad_clip:
-                            G = (grad_clip / G_norm) * G
+                        # if G_norm > grad_clip:
+                        #     print('clipping grad norm from',G_norm)
+                        #     G = (grad_clip / G_norm) * G
                         grad[:, phys, :] += G
 
                     grad /= N
@@ -583,11 +591,13 @@ class MPS(TNetwork):
                         phys = sample[site]
                         Lm = L_envs[idx][site]   
                         Rm = R_envs[idx][site]
+                        psi_n = float(Lm @ T[:, phys, :] @ Rm)
                         G = np.einsum('a,b->ab', Lm.ravel(), Rm.ravel()) 
+                        G = G/psi_n
                         G_norm = np.linalg.norm(G)
-                        if G_norm > grad_clip:
-                            G = (grad_clip / G_norm) * G
-                        grad[:, phys, :] += weights[idx] * G
+                        # if G_norm > grad_clip:
+                        #     G = (grad_clip / G_norm) * G
+                        # grad[:, phys, :] += weights[idx] * G
 
                     grad /= N
                     T += learning_rate * grad
@@ -610,11 +620,13 @@ class MPS(TNetwork):
                         phys = sample[site]
                         Lm = L_envs[idx][site]   
                         Rm = R_envs[idx][site]
+                        psi_n = float(Lm @ T[:, phys, :] @ Rm)
                         G = np.einsum('a,b->ab', Lm.ravel(), Rm.ravel()) 
+                        G = G/psi_n
                         G_norm = np.linalg.norm(G)
-                        if G_norm > grad_clip:
-                            G = (grad_clip / G_norm) * G
-                        grad[:, phys, :] += weights[idx] * G
+                        # if G_norm > grad_clip:
+                        #     G = (grad_clip / G_norm) * G
+                        # grad[:, phys, :] += weights[idx] * G
 
                     grad /= N
                     T += learning_rate * grad
@@ -699,7 +711,9 @@ class MPS(TNetwork):
                         phys = sample[site]
                         Lm = L_envs[idx][site]
                         Rm = R_envs[idx][site]
+                        psi_n = float(Lm @ T[:, phys, :] @ Rm)
                         G = self.grad_over_site_samples([Lm], [Rm])[0]
+                        G = G/psi_n
 
                         G_norm = np.linalg.norm(G) + eps
                         if G_norm > grad_clip:
@@ -748,8 +762,9 @@ class MPS(TNetwork):
                         phys = sample[site]
                         Lm = L_envs[idx][site]
                         Rm = R_envs[idx][site]
+                        psi_n = float(Lm @ T[:, phys, :] @ Rm)
                         G = self.grad_over_site_samples([Lm], [Rm])[0]
-
+                        G = G/psi_n
                         G_norm = np.linalg.norm(G) + eps
                         if G_norm > grad_clip:
                             G *= (grad_clip / G_norm)
